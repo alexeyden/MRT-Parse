@@ -1,4 +1,4 @@
-from parser import *
+from parse import *
 
 parser_map = { 'buruki.mailer@buruki.com' : buruki.BurukiParser() }
 

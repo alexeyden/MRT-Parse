@@ -4,7 +4,7 @@ import os
 import email
 import time
 
-import parser
+import parse
 import config
 import storage
 import fetch.pickle
