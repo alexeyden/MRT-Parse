@@ -1,7 +1,7 @@
 import email
 import imaplib
  
-
+'''
 class 
 '''
 m = imaplib.IMAP4_SSL("imap.gmail.com")
@@ -12,3 +12,4 @@ msgs = [m.fetch(emailid, '(RFC822)')[1][0][1] for emailid in items[0].decode('ut
 '''
 
 # pickle.dump(msgs, open('dump.pickle', 'wb'))
+'''
