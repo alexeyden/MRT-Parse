@@ -5,8 +5,8 @@
     o	4 PointEnd (x.dest)–город назначения;
     o	5 FlyBegin (result.flight_date_from)– дата начала полетов;
     o	6 FlyEnd (result.flight_date_to)– дата окончания полетов;
-    o	7 FlyNotBegin(Null) –начало периода в который полеты не совершаются;
-    o	8 FlyNotEnd (Null)– конец периода в который полеты не совершаются;
+    o	7 (!! Удалить, нет данных в письме)FlyNotBegin(Null) –начало периода в который полеты не совершаются;
+    o	8 (!! Удалить, нет данных в письме)FlyNotEnd (Null)– конец периода в который полеты не совершаются;
     o	9 BuyBegin (result.sale_date_from)– дата начала периода покупки;
     o	10 BuyEnd (result.sale_date_to)– дата конца периода покупки;
     o	11 Price (x.price)– цена билета;

@@ -10,8 +10,8 @@ import fetch.pickle
 import pypyodbc
 #conn = pymssql.connect(host='DESKTOP-QF8UM51', user=r'DESKTOP-QF8UM51\nadym', password='123', database='aviaDb', as_dict=True)
 
-#connection_string =r'Driver={SQL Server};Server=<DESKTOP-QF8UM51>;Database=<aviaDb>;Uid=<Admin>;Pwd=<1>;'
-#connection = pypyodbc.connect(connection_string)
+connection_string =r'Driver={SQL Server};Server=DESKTOP-QF8UM51;Database=aviaDb;Uid=sa;Pwd=123;'
+connection = pypyodbc.connect(connection_string)
 
 class DataBase:
     def __init__(self):
@@ -21,7 +21,7 @@ class DataBase:
         raise NotImplementedError()
 
     def get_cursor(self):
-        connection = pypyodbc.connect(driver='{SQL Server}', server='DESKTOP-QF8UM51', database='aviaDb', uid='Admin', pwd='1')
+        connection = pypyodbc.connect(driver='{SQL Server}', server='DESKTOP-QF8UM51', database='aviaDb', uid='DESKTOP-QF8UM51\nadym', pwd='')
         #SQL = 'SELECT * FROM <YOURTABLE>'
         # cur.execute(SQL)
         # cur.close()
@@ -50,8 +50,8 @@ class DataBase:
 
                 print('\tЦены: \n',
                       ''.join(['\t\t{0} <-> {1} {2:,d} р\n'.format(x.source, x.dest, x.price) for x in result.prices]))
-                print(['INSERT INTO dbo.Race (ID, Companyid, PointBegin, PointEnd, FlyBegin, FlyEnd, FlyNotBegin, FlyNotEnd, BuyBegin, BuyEnd, Price, Link) values ({0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11})'.format(num + 1, result.company, x.source, x.dest, result.flight_date_from, result.flight_date_to, 'Null', 'Null', result.sale_date_from, result.sale_date_to, x.price, 'Null')for x in result.prices])
-
+                print(["INSERT INTO dbo.Race (Companyid, PointBegin, PointEnd, FlyBegin, FlyEnd, FlyNotBegin, FlyNotEnd, BuyBegin, BuyEnd, Price, Link) values ('{0}', '{1}', '{2}', {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10})".format(result.company, x.source, x.dest, result.flight_date_from, result.flight_date_to, 'Null', 'Null', result.sale_date_from, result.sale_date_to, x.price, '')for x in result.prices])
+                #Вместо print сделать запись в массив, и потом вызывать
 
             print()
 
