@@ -1,13 +1,27 @@
 import email
 import imaplib
- 
-'''
-m = imaplib.IMAP4_SSL("imap.gmail.com")
-m.login('avia.tests@gmail.com ', 'kP5tuFzX7R2')
-m.select("Inbox")
-resp, items = m.search(None, '(FROM "buruki.mailer@buruki.com")')
-msgs = [m.fetch(emailid, '(RFC822)')[1][0][1] for emailid in items[0].decode('utf-8').split()]
+import config
 
 
-# pickle.dump(msgs, open('dump.pickle', 'wb'))
-'''
+class FetchGmail:
+
+    def __init__(self):
+        self.imap = imaplib.IMAP4_SSL(config.gmail_imap)
+        self.imap.login(config.gmail_login, config.gmail_password)
+        self.imap.select('Inbox')
+
+    def fetch(self, mail):
+        return self._fetch(mail, '(UNSEEN)', '(FROM "{0}")'.format(mail))
+
+    def fetch_all(self, mail):
+        return self._fetch(mail, '(FROM "{0}")'.format(mail))
+
+    def _fetch(self, mail, *query):
+        resp, items = self.imap.search(None, *query)
+
+        messages = []
+        for email_id in items[0].decode('utf-8').split():
+            msg = self.imap.fetch(email_id, '(RFC822)')[1][0][1].decode('utf-8')
+            messages.append(email.message_from_string(msg))
+
+        return messages

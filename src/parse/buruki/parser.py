@@ -2,16 +2,18 @@ import re
 import bs4
 import datetime
 
-from .result import *
+from . import regions
+from parse.result import *
 
 
 class BurukiParser:
     _month_num = dict(янв=1, фев=2, мар=3, апр=4, май=5, мая=5, июн=6, июл=7, авг=8, сен=9, окт=10, ноя=11, дек=12)
     _date_re = re.compile(r'(?<=\s)\d{1,2}(?=\s)[\sа-я]+\d{4}', re.I)
     _price_re = re.compile(r'\d+')
+    _regions = regions.Regions('../data/regions.csv')
 
     def __init__(self):
-        pass
+        open('../data/details.txt', 'w').close()
 
     def parse(self, mail):
         html = [load for load in mail.get_payload() if load.get_content_type() == 'text/html'][0].get_payload()
@@ -25,12 +27,14 @@ class BurukiParser:
                 continue
 
             logo = discount.select("> tr > td > table img")
+            company = logo[0]['alt']
 
-            try:
-                company = logo[0]['alt']
-            except IndexError as er:
-                print(discount.select("> tr"))
-                raise er
+            details = discount.select("> tr > td > table > tr")[0].select("> td > table > tbody > tr")[-4].td.string
+            if details is not None:
+                detail_info = self._parse_details(details)
+
+                with open('../data/details.txt', 'a') as f:
+                    f.write(details.strip() + '\n\n')
 
             sale_date_text = discount.select("> tr > td > table > tr")[0].select("> td > table > tbody > tr")[-3].td.string
             flight_date_text = discount.select("> tr > td > table > tr")[0].select("> td > table > tbody > tr")[-2].td.string
@@ -58,6 +62,10 @@ class BurukiParser:
                 result.prices.append(Price(source = source.strip(), dest = dest.strip(), price = price))
 
             yield (status, result)
+
+    def _parse_details(self, details : str):
+        details = details.lower()
+        return None
 
     def _parse_date(self, date_str):
         day_str, month_str, year_str = re.split(r'\s+', date_str)
